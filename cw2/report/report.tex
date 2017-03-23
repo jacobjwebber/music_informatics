@@ -64,7 +64,29 @@ The relative nature of these scores is explained by the conservative nature of t
 
 The next proposed technique, a Markov grammar, addresses some of the conservativity of the Treebank method. This method is applied to NLP in \cite{Seneff1992}. This creates Markov chains at the note level in order to predict the likeliness of a phrase ending given the previous $n$ notes, where $n$ is the order of Markov process. In this case a third-order Markov process was used and produced a  precision of 63.1\%, a recall of 80.2\%, and an F-score of 70.6\%. While the precision in this case is slightly lower than that of the Treebank technique, as would be expected with a more permissive system, the recall is very much higher.
 
-The third technique can be thought of as an extension to the Markov grammar described previously. This uses the Data-Oriented Parsing (DOP) technique to take into account a global context. 
+The third technique can be thought of as an extension to the Markov grammar described previously. This uses the Data-Oriented Parsing (DOP) technique to take into account a global context. This context allows factors such as average phrase length in the piece being parsed to be taken into account. As expected, this extra information improves all measured scores. The DOP-Markov parser obtained a precision of 76.6\%, a recall of 85.9\%, and an F-score of 81.0\%. 
+
+Table \ref{resulttab} shows all of these results in full. The results can be summarised by comparing how much information these parsers take into account from their training. The Treebank only operates at the object level, and therefore only remembers familiar objects from the training set. The Markov technique takes into account probabilistically the relation between notes, or sub-object elements and therefore gives better results, although some precision is sacrificed as this yields a less conservative grammar. The final and most successful technique adds to this a global context. It is demonstrated in these cases, therefore, that the more probabilistic data gathered from the training set, the more accurate the phrase predictions will be.
+
+\begin{table}
+\centering
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ Parsing technique & precision & recall & F-score \\ 
+ \hline
+ Treebank & 68.7\% & 3.4\% & 6.5\% \\ 
+ Markov Grammar & 63.1\% & 80.2\% & 70.6\% \\ 
+ Markov + DOP & 76.6\% & 85.9\% & 81.0\% \\ 
+
+ \hline
+\end{tabular}
+\caption{Table showing full results from the parsing experiments. The Markov and DOP technique was the most successful.}
+\label{resulttab}
+\end{table}
+
+\section{Other Parsing Techniques}
+
+
 
 \section{Critical Review}
 
