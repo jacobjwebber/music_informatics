@@ -1,0 +1,34 @@
+\begin{thebibliography}{1}
+
+\bibitem{Bod_probabilisticgrammars}
+R.~Bod, ``Probabilistic grammars for music.''
+
+\bibitem{music-theory}
+B.~Benward and M.~Saker, {\em Music in Theory and Practice, Vol. 1 (v. 1)}.
+\newblock McGraw-Hill, 2008.
+
+\bibitem{essen}
+E.~Selfridge-Field, ``The essen musical data package,'' 1995.
+
+\bibitem{nlp-score}
+E.~Black and et~al, ``A procedure for quantitatively comparing the syntactic
+  coverage of english grammars,'' in {\em Speech and Natural Language:
+  Proceedings of a Workshop Held at Pacific Grove, California, February 19-22,
+  1991}, pp.~306--5, 1991.
+
+\bibitem{manning}
+C.~D. Manning and H.~Sch{\"u}tze, {\em Foundations of Statistical Natural
+  Language Processing}.
+\newblock Cambridge, Massachusetts: The {MIT} Press, 1999.
+
+\bibitem{Bod93}
+R.~Bod, ``Using an annotated language corpus as a virtual stochastic grammar,''
+  in {\em Proceedings of the 11th National Conference on Artificial
+  Intelligence. Washington, DC, USA, July 11-15, 1993.} (R.~Fikes and W.~G.
+  Lehnert, eds.), pp.~778--783, {AAAI} Press / The {MIT} Press, 1993.
+
+\bibitem{Seneff1992}
+S.~Seneff, ``Tina: A natural language system for spoken language
+  applications,'' {\em Comput. Linguist.}, vol.~18, pp.~61--86, Mar. 1992.
+
+\end{thebibliography}
