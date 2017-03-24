@@ -1,4 +1,8 @@
-%  for music parsing
+%% CW2
+%
+%This grammar is modified.
+%
+%%  for music parsing
 
 % runs under sicstus Prolog  4.2 on DICE
 
@@ -16,22 +20,32 @@
 % make dynamic;
 % need to make similar declarations for any new grammar symbols
 % that are introduced.
+%
 
-:- dynamic tune/2, line/2, bar1/2, bar/2, bar4/2, tonic/2, dominant/2.
 :- dynamic tonicA/2,tonicB/2,tonicC/2,tonicD/2.
-:- dynamic subdominant/2, ton/3, by_ton/3, dom/3, by_dom/3, subd/3, by_subd/3.
+:- dynamic subdominantA/2, ton/3, by_ton/3, dom/3, by_dom/3, subd/3, by_subd/3.
+:- dynamic tune/2, line/2, line2/2 bar1/2, bar/2, bar4/2, tonic/2, dominantA/2.
 :- dynamic tonicA/1, tonicB/2, tonicC/2, tonicD/2.
 :- dynamic sum_int/3.
 
 % grammar allowing rhythmic variation
 
-tune --> line, line.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The following lines have been modified to make the grammar more restrictive by
+% forcing the tune to end on a perfect cadence.
+% See bellow for discussion. Modified lines marked with MOD.
+% See the ext1 section for desctription of this extension.
+
+tune --> line, line2. %MOD
 line --> bar1, bar, bar, bar4.
+line2 --> bar1, bar, bar3, bar4. %MOD
+
 
 bar1 --> tonic.
 bar  --> tonic.
 bar  --> subdominant.
 bar  --> dominant.
+bar3 -->dominant. % MOD
 bar4 --> tonic.
 
 tonic --> tonicA.
@@ -50,8 +64,8 @@ tonicA --> ton(1),by_ton(1),ton(1),ton(1),by_ton(1),ton(1),[bl].
 tonicB --> ton(1),by_ton(1),ton(1), ton(A),ton(B), [bl], { sum_int(A, B, s(s(1))) }.
 tonicC --> ton(s(1)),by_ton(1),ton(s(s(1))),[bl].
 tonicD --> ton(1),by_ton(1),ton(1),ton(s(s(1))),[bl].
-dominant --> dom(1),by_dom(1),dom(1),dom(1),by_dom(1),dom(1),[bl].
-subdominant --> subd(1),by_subd(1),subd(1),subd(1),by_subd(1),subd(1),[bl].
+dominantA --> dom(1),by_dom(1),dom(1),dom(1),by_dom(1),dom(1),[bl].
+subdominantA --> subd(1),by_subd(1),subd(1),subd(1),by_subd(1),subd(1),[bl].
 
 ton(X) --> [a(X)].
 ton(X) --> [d(X)].
@@ -97,6 +111,25 @@ sum_int( s(s(1)), s(s(1)), s(s(s(s(s(1))))) ).
 sum_int( s(s(s(1))), s(1), s(s(s(s(s(1))))) ).
 sum_int( s(s(s(s(1)))), 1, s(s(s(s(s(1))))) ).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%]
+% Examples accepted by this grammar.
+%
+% The following are two examples accepted by the grammar in its original form.
+%
+% Ex1 = [d(1),'B'(1),f(1),f(s(s(1))),bl,e(1),f(1),e(1),a(1),a(1),a(1),bl,
+% 'A'(s(1)),e(1),f(s(s(1))),bl,a(s(1)),'B'(1),d(s(s(1))),bl,
+% a(1),'B'(1),d(1),'A'(1),b(1),d(1),bl,g(1),d(1),'B'(1),g(1),e(1),g(1),bl,
+% d(1),e(1),b(1),'B'(1),e(1),b(1),bl,'A'(s(1)),e(1),'A'(s(s(1))),bl].
+%
+% Note that the penultimate bar is on the subdominant. This is not permitted
+% in the updated grammar. Additionally, all bars that are not on the tonic
+% consist only of quavers. The grammar is extended to allow 
+%
+% Ex2 = ['A'(1),'A'(1),f(1),a(s(s(1))),bl,a(1),d(1),d(1),d(s(s(1))),bl,
+% 'A'(1),c(1),e(1),a(1),f(1),c(1),bl,f(s(1)),b(1),a(s(s(1))),bl,
+% f(s(1)),e(1),a(s(s(1))),bl,e(1),f(1),'A'(1),e(1),f(1),'A'(1),bl,
+% 'B'(1),'B'(1),'B'(1),b(1),d(1),b(1),bl,a(s(1)),b(1),'A'(s(s(1))),bl].
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NOT ACCEPTED BY THIS GRAMMAR.
 
@@ -104,20 +137,56 @@ sum_int( s(s(s(s(1)))), 1, s(s(s(s(s(1))))) ).
 % This grammar only accepts tunes whose chord sequence uses the I, IV and V
 % chords. These are the most important chords for a major key, being all of the
 % major chords. However, many tunes will use other chords.
+%
+% This grammar only accepts melodies with rhythmic variation when on the tonic 
+% chord. It could be argued that it is stylistic to only have longer notes on
+% the tonic, but this is seen as tenuous.
 
 % This grammar only accepts tunes in 6/8. Although this time signature is fairly
-% common, it is still a very small subset of tunes.
+% common, it is still a very small subset of tunes. It was decided to not change
+% this in this grammar, but this was done in miExtend. This means this grammar 
+% stays true to the jig style which is typically in 6/8.
 %
-% Below are two extensions to the grammar, each with an example melody that 
+% Below are three extensions to the grammar, each with an example melody that 
 % is accepted by the extended grammar, but not the original.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Ext 1.
 %
+% Extension 1 is more of a limitation. It is made by modifications above and
+% described here.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Extension 1 modifies the grammar so that the penultimate bar must be a
+% dominant bar. This gives a perfect cadence at the end of the piece.
+% An example of a melody permitted by the grammar without this particular
+% extension.
+%
+% Ex3 = ['A'(1),'B'(1),'A'(1),d(1),b(1),d(1),bl,b(1),c(1),g(1),b(s(s(1))),bl,
+% b(1),e(1),d(1),g(s(1)),g(1),bl,a(1),'B'(1),f(1),f(1),f(1),d(1),bl,
+% d(1),'A'(1),'A'(1),'A'(s(s(1))),bl,c(s(1)),a(1),a(s(s(1))),bl,
+% 'B'(1),e(1),b(1),g(s(s(1))),bl,a(1),e(1),f(1),'A'(s(1)),a(1),bl].
+%
+% Note the penultimate bar is on the supertonic. This is quite unstylistic.
+% 
+% The following example is accepted both with or without this modification:
+%
+% Ex4 = [d(1),e(1),'A'(1),'A'(1),b(1),'A'(1),bl,b(1),c(1),b(1),'B'(s(1)),g(1),bl,
+% f(1),e(1),f(1),d(s(s(1))),bl,a(1),'A'(1),f(1),f(1),'B'(1),a(1),bl,
+% 'A'(1),'A'(1),f(1),'A'(1),b(1),d(1),bl,c(1),f(1),'A'(1),a(s(s(1))),bl,
+% e(1),e(1),a(1),'A'(1),a(s(1)),bl,a(s(1)),b(1),f(s(s(1))),bl].
+%
+% Note that the penultimate bar is dominant.
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Ext 2.
+%
 %Here is an extension to allow chord ii, the supertonic.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Simple melody with supertonic
+%Simple melody with supertonici (Ex5).
 input(Super) :-
   Line1 = [d(1),f(1),f(1),d(1),b(1),d(1),bl,e(1),e(1),g(1),b(1),g(1),g(1),bl],
   Line3 = [d(1),g(1),'B'(1),d(1),e(1),d(1),bl,d(1),f(1),'A'(1),d(1),b(1),d(1),bl],
@@ -140,7 +209,50 @@ supt(X) --> ['B'(X)].
 by_supt(X) --> [c(X)].
 by_supt(X) --> supt(X).
 
+%Allowing a minor chord adds colour.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Ext 3.
+%
+%Here is an extension rhytmic variation not just on the tonic.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The following melody is accepted by this grammar but not the original
+% Ex6 = ['A'(1),'B'(1),'A'(1),d(1),b(1),d(1),bl,b(1),c(1),g(1),b(s(s(1))),bl,
+% b(1),e(1),d(1),g(s(1)),g(1),bl,a(1),'B'(1),f(1),f(1),f(1),d(1),bl,
+% d(1),'A'(1),'A'(1),'A'(s(s(1))),bl,c(s(1)),a(1),a(s(s(1))),bl,
+% 'B'(1),e(1),b(1),g(s(s(1))),bl,a(1),e(1),f(1),'A'(s(1)),a(1),bl].
+%
+:- dynamic supertonicB/2,supertonicC/2,supertonicD/2.
+:- dynamic dominantB/2,dominantC/2,dominantD/2.
+:- dynamic subdominantB/2,subdominantC/2,subdominantD/2.
+
+dominant --> dominantA.
+dominant --> dominantB.
+dominant --> dominantC.
+dominant --> dominantD.
+
+subdominant --> subdominantA.
+subdominant --> subdominantB.
+subdominant --> subdominantC.
+subdominant --> subdominantD.
+
+supertonic --> supertonicA.
+supertonic --> supertonicB.
+supertonic --> supertonicC.
+supertonic --> supertonicD.
+
+dominantB --> dom(1),by_dom(1),dom(1), dom(A),dom(B), [bl], { sum_int(A, B, s(s(1))) }.
+dominantC --> dom(s(1)),by_dom(1),dom(s(s(1))),[bl].
+dominantD --> dom(1),by_dom(1),dom(1),dom(s(s(1))),[bl].
+
+subdominantB --> subd(1),by_subd(1),subd(1), subd(A),subd(B), [bl], { sum_int(A, B, s(s(1))) }.
+subdominantC --> subd(s(1)),by_subd(1),subd(s(s(1))),[bl].
+subdominantD --> subd(1),by_subd(1),subd(1),subd(s(s(1))),[bl].
+
+supertonicB --> supt(1),by_supt(1),supt(1), supt(A),supt(B), [bl], { sum_int(A, B, s(s(1))) }.
+supertonicC --> supt(s(1)),by_supt(1),supt(s(s(1))),[bl].
+supertonicD --> supt(1),by_supt(1),supt(1),supt(s(s(1))),[bl].
 
 % Next procedure for random generation of melody following grammar;
 %  NB: only works when each grammar symbol has a corresponding
@@ -237,4 +349,5 @@ make_new_with_header( AbcFile, NewAbcFile ) :-
 %
 %  Now the music can be viewed, and played with the generated midi.
 %
-%   abc2ly and lilypond are neither installed on DICE, but are freely available.
+%   abc2ly and lilypond are neither installed on DICE, but
+%   are freely available.
