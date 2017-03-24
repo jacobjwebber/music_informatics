@@ -2,7 +2,7 @@
 
 This is the submission for cw2. included at top level are a pdf of the report providing
 an analysis of the article by Rens Bod and a prolog file
-of the extended grammar, miNewExtend.pl. This includes as comments musical examples.
+of the extended grammar, miNewExtend.pl. This includes musical examples as comments.
 
 In addition to this mi_extend.pl is also included. This includes some modifications not present in
 the later version. specifically allowing duple time. This is respectfully and optimistically
