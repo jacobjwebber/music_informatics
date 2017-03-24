@@ -6,36 +6,36 @@ Database file #1: bibliography.bib
 You've used 7 entries,
             1876 wiz_defined-function locations,
             524 strings with 4745 characters,
-and the built_in function-call counts, 1556 in all, are:
-= -- 150
+and the built_in function-call counts, 1581 in all, are:
+= -- 154
 > -- 48
 < -- 0
 + -- 19
 - -- 12
-* -- 86
-:= -- 215
-add.period$ -- 8
+* -- 87
+:= -- 219
+add.period$ -- 9
 call.type$ -- 7
-change.case$ -- 5
+change.case$ -- 4
 chr.to.int$ -- 0
 cite$ -- 7
-duplicate$ -- 82
-empty$ -- 175
+duplicate$ -- 87
+empty$ -- 177
 format.name$ -- 12
-if$ -- 387
+if$ -- 394
 int.to.chr$ -- 0
 int.to.str$ -- 7
-missing$ -- 7
-newline$ -- 26
+missing$ -- 9
+newline$ -- 27
 num.names$ -- 9
-pop$ -- 38
+pop$ -- 37
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 59
+skip$ -- 56
 stack$ -- 0
 substring$ -- 82
-swap$ -- 27
+swap$ -- 28
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
@@ -43,4 +43,4 @@ type$ -- 0
 warning$ -- 0
 while$ -- 17
 width$ -- 8
-write$ -- 62
+write$ -- 64
